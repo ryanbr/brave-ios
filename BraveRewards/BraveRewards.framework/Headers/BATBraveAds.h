@@ -74,11 +74,20 @@ NS_SWIFT_NAME(BraveAds)
 /// Whether or not Brave Ads is enabled
 @property (nonatomic, assign, getter=isEnabled) BOOL enabled;
 
+/// Whether or not the user has opted out of subdivision ad targeting
+@property (nonatomic, assign, getter=shouldAllowAdsSubdivisionTargeting) BOOL allowAdsSubdivisionTargeting;
+
 /// The max number of ads the user can see in an hour
 @property (nonatomic, assign) NSInteger numberOfAllowableAdsPerHour NS_SWIFT_NAME(adsPerHour);
 
 /// The max number of ads the user can see in a day
 @property (nonatomic, assign) NSInteger numberOfAllowableAdsPerDay NS_SWIFT_NAME(adsPerDay);
+
+/// Selected ads subdivision targeting option
+@property (nonatomic, copy) NSString * adsSubdivisionTargetingCode;
+
+/// Automatically detected ads subdivision targeting code
+@property (nonatomic, copy) NSString * automaticallyDetectedAdsSubdivisionTargetingCode;
 
 /// The user model locales Brave Ads supports currently
 @property (nonatomic, readonly) NSArray<NSString *> *userModelLanguages;
