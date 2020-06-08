@@ -82,6 +82,60 @@ class AdsDetailsViewController: UIViewController {
     Strings.fourAdsPerHour,
     Strings.fiveAdsPerHour
   ]
+
+  private let subdivisionTargetingOptions = [
+    "Disabled",
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming"
+  ]
   
   private var adsReceived: Int = 0
   private var estimatedEarnings: Double = 0.0
@@ -90,6 +144,7 @@ class AdsDetailsViewController: UIViewController {
 extension AdsDetailsViewController: UITableViewDelegate, UITableViewDataSource {
   private enum Row: Int, CaseIterable {
     case adsPerHour
+    case subdivisionTargeting
     case currentEarnings
     case nextPayment
     case numberOfAdsReceived
@@ -114,6 +169,20 @@ extension AdsDetailsViewController: UITableViewDelegate, UITableViewDataSource {
       }
       controller.title = Strings.numberOfAdsPerHourOptionsTitle
       navigationController?.pushViewController(controller, animated: true)
+    } else if row == .subdivisionTargeting {
+      let choices = [Int](1..<subdivisionTargetingOptions.count+1)
+      let selectedIndex = state.ads.adsPerHour - 1
+      let controller = OptionsSelectionViewController(
+        options: subdivisionTargetingOptions,
+        selectedOptionIndex: selectedIndex) { [weak self] (selectedIndex) in
+          guard let self = self else { return }
+          if selectedIndex < choices.count {
+            self.state.ads.adsPerHour = choices[selectedIndex]
+          }
+          self.navigationController?.popViewController(animated: true)
+      }
+      controller.title = Strings.adsSubdivisionTargetingTitle
+      navigationController?.pushViewController(controller, animated: true)
     }
   }
   
@@ -136,6 +205,15 @@ extension AdsDetailsViewController: UITableViewDelegate, UITableViewDataSource {
       let adsPerHour = state.ads.adsPerHour
       if adsPerHour - 1 < adsPerHourOptions.count {
         cell.accessoryLabel?.text = adsPerHourOptions[adsPerHour - 1]
+      }
+    case .subdivisionTargeting:
+      cell.accessoryType = .disclosureIndicator
+      cell.label.text = Strings.adsSubdivisionTargeting
+      let subdivisionTargeting = state.ads.adsPerHour
+      if subdivisionTargeting != -1 {
+        if subdivisionTargeting - 1 < subdivisionTargetingOptions.count {
+          cell.accessoryLabel?.text = subdivisionTargetingOptions[subdivisionTargeting - 1]
+        }
       }
     case .currentEarnings:
       cell.label.text = Strings.adsEstimatedEarnings
