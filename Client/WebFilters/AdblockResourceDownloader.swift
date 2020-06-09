@@ -23,7 +23,7 @@ class AdblockResourceDownloader {
     
     static let folderName = "abp-data"
     
-    static let endpoint = "https://adblock-data.s3.brave.com/iOS13"
+    static let endpoint = "https://adblock-data.s3.brave.com/ios"
     
     init(networkManager: NetworkManager = NetworkManager(), locale: String? = Locale.current.languageCode) {
         if locale == nil {

@@ -45,19 +45,17 @@ enum AdblockerType {
         switch self {
         case .general: return AdblockResourcesMappings.generalAdblockName(for: fileType)
         case .httpse: return AdblockResourcesMappings.generalHttpseName
-        case .regional(let locale): return ResourceLocale(rawValue: locale)?.resourceName(for: fileType)
+        case .regional(let locale):
+            guard let regionalName = ResourceLocale(rawValue: locale)?.resourceName(for: fileType) else {
+                return nil
+            }
+            return "\(regionalName)-latest"
         }
     }
     
     /// A name under which given resource is stored on server.
     var endpoint: URL? {
-        guard var url = URL(string: AdblockResourceDownloader.endpoint) else { return nil }
-        
-        if case .regional = self {
-            url.appendPathComponent("regional")
-        }
-        
-        return url
+        return URL(string: AdblockResourceDownloader.endpoint)
     }
     
     var blockListName: BlocklistName? {
